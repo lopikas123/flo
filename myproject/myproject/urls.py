@@ -1,10 +1,13 @@
 from django.contrib import admin
 from django.urls import path, include
-from django.shortcuts import redirect  # Импортируем redirect
+from django.shortcuts import render
+
+# Представление для домашней страницы
+def home(request):
+    return render(request, 'home.html')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('flowers/', include('flowers.urls')),  # Подключение приложения 'flowers'
     path('accounts/', include('accounts.urls')),  # Подключение приложения 'accounts'
-    path('', lambda request: redirect('flower_list')),  # Перенаправление на каталог цветов
+    path('', home, name='home'),
 ]
