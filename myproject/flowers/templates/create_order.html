@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Оформление заказа{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Оформление заказа</h2>
+    <form action="{% url 'create_order' flower.id %}" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="deliveryAddress" class="form-label">Адрес доставки</label>
+            <input type="text" class="form-control" id="deliveryAddress" name="delivery_address" placeholder="Введите адрес доставки" required>
+        </div>
+        <div class="mb-3">
+            <label for="deliveryDate" class="form-label">Дата доставки</label>
+            <input type="date" class="form-control" id="deliveryDate" name="delivery_date" required>
+        </div>
+        <div class="mb-3">
+            <label for="deliveryTime" class="form-label">Время доставки</label>
+            <input type="time" class="form-control" id="deliveryTime" name="delivery_time" required>
+        </div>
+        <div class="mb-3">
+            <label for="comment" class="form-label">Комментарий</label>
+            <textarea class="form-control" id="comment" name="comment" placeholder="Ваш комментарий"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Оформить заказ</button>
+    </form>
+</div>
+{% endblock %}

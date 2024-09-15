@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import RegistrationForm, LoginForm
 
+
 @login_required
 def home(request):
     return render(request, 'home.html', {'username': request.user.username})
@@ -17,7 +18,7 @@ def register(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Ваш аккаунт был создан')
-            return redirect('login')
+            return redirect('accounts:login')
     else:
         form = RegistrationForm()
 
@@ -45,9 +46,11 @@ def login(request):
 
     return render(request, 'login.html', {'form': form})
 
+
 def logout(request):
     auth_logout(request)
-    return redirect('login')
+    return redirect('accounts:login')
 
 def home(request):
     return render(request, 'home.html')
+

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'accounts',
     "myapp",
     "myproject",
+    'flowers',
 
 ]
 
@@ -142,3 +143,40 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DEBUG = True
+
+TELEGRAM_BOT_TOKEN = '6387690359:AAGG4VTh5b4DV7yZDlHW-a_s-_H36wZToH4'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+LOGIN_REDIRECT_URL = 'home.html'  # URL, на который перенаправляется пользователь после входа
+LOGOUT_REDIRECT_URL = 'login.html'  # URL, на который перенаправляется пользователь после выхода
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+bot_token = '6387690359:AAGG4VTh5b4DV7yZDlHW-a_s-_H36wZToH4'
+chat_id = '1026013462'

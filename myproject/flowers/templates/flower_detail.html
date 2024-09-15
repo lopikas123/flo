@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="display-4 mb-4">{{ flower.name }}</h1>
+
+    <!-- Уменьшенное изображение товара -->
+    <img src="{{ flower.image.url }}" alt="{{ flower.name }}" class="img-fluid mb-3" style="max-width: 300px; height: auto;">
+
+    <p class="lead">{{ flower.description }}</p>
+    <p class="h4">Цена: ${{ flower.price }}</p>
+
+    <h2 class="mt-5">Оставить отзыв на товар: {{ flower.name }}</h2>
+    <form method="post" action="{% url 'add_review' flower.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Оставить отзыв</button>
+    </form>
+</div>
+
+  <h2 class="mb-4">Отзывы:</h2>
+  {% if reviews %}
+    <div class="list-group mb-4">
+      {% for review in reviews %}
+        <div class="list-group-item mb-3">
+          <h5 class="mb-1">{{ review.user.username }}</h5>
+          <small class="text-muted">{{ review.created_at }}</small>
+          <div class="mb-2">
+            Оценка:
+            <!-- Звезды для рейтинга -->
+            {% for i in "12345" %}
+              {% if i|add:0 <= review.rating %}
+                <span class="fa fa-star checked"></span>
+              {% else %}
+                <span class="fa fa-star"></span>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <p class="mb-1">{{ review.comment }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Нет отзывов</p>
+  {% endif %}
+
+<!-- Подключение Font Awesome -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+
+<style>
+  .fa-star {
+    font-size: 2rem;
+    color: lightgray;
+    cursor: pointer;
+  }
+  .fa-star.checked {
+    color: orange;
+  }
+  .rating .fa-star:hover,
+  .rating .fa-star.hover {
+    color: gold;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const stars = document.querySelectorAll('.rating .fa-star');
+    const ratingInput = document.getElementById('rating');
+
+    function updateStars(rating) {
+      stars.forEach(star => {
+        if (parseInt(star.getAttribute('data-value')) <= rating) {
+          star.classList.add('checked');
+        } else {
+          star.classList.remove('checked');
+        }
+      });
+    }
+
+    stars.forEach(star => {
+      star.addEventListener('mouseover', () => {
+        const value = star.getAttribute('data-value');
+        stars.forEach(s => {
+          if (s.getAttribute('data-value') <= value) {
+            s.classList.add('hover');
+          } else {
+            s.classList.remove('hover');
+          }
+        });
+      });
+
+      star.addEventListener('mouseout', () => {
+        const currentRating = ratingInput.value;
+        stars.forEach(s => {
+          s.classList.remove('hover');
+        });
+        updateStars(currentRating);
+      });
+
+      star.addEventListener('click', () => {
+        const value = star.getAttribute('data-value');
+        ratingInput.value = value;
+        updateStars(value);
+        stars.forEach(s => {
+          s.classList.remove('hover');
+        });
+      });
+    });
+  });
+</script>
+{% endblock %}

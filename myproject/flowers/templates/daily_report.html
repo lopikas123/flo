@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Отчет за {{ month }}</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Отчет за {{ month }}</h1>
+    <h2>Общие данные за месяц</h2>
+    <p>Количество заказов за месяц: {{ total_orders_month }}</p>
+    <p>Общая выручка за месяц: {{ total_revenue_month }} руб.</p>
+
+    <h2>Данные по дням</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Количество заказов</th>
+                <th>Выручка</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in daily_reports %}
+                <tr>
+                    <td>{{ report.date|date:"d.m.Y" }}</td>
+                    <td>{{ report.total_orders }}</td>
+                    <td>{{ report.total_revenue }} руб.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

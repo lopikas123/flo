@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/myproject/accounts/templates/home.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myproject/accounts/templates/login.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myproject/accounts/templates/register.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myproject/db.sqlite3" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myproject/flowers/__init__.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myproject/flowers/admin.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myproject/flowers/apps.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myproject/flowers/forms.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myproject/flowers/models.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myproject/flowers/notifications.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myproject/flowers/templates/flower_catalog.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myproject/flowers/templates/order_confirmation.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myproject/flowers/tests.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myproject/flowers/urls.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myproject/flowers/views.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/myproject/myproject/utils.py" charset="ISO-8859-1" />
+    <file url="PROJECT" charset="windows-1251" />
+  </component>
+</project>
