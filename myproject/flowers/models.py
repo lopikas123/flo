@@ -1,14 +1,11 @@
 from django.db import models
-from django.conf import settings
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
+from django.contrib.auth.models import User
 
 class Flower(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    description = models.TextField(default='Описание отсутствует')  # Добавить значение по умолчанию
+    description = models.TextField(default='Описание отсутствует')
     image = models.ImageField(upload_to='flowers/', blank=True, null=True)
     available = models.BooleanField(default=True)
 
@@ -21,21 +18,27 @@ class Order(models.Model):
         ('in_progress', 'Находится в работе'),
         ('out_for_delivery', 'В доставке'),
         ('completed', 'Выполнен'),
+        ('canceled', 'Отмена')
     ]
-
     flower = models.ForeignKey(Flower, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     delivery_address = models.CharField(max_length=255)
     delivery_date = models.DateField()
     delivery_time = models.TimeField()
     comment = models.TextField(blank=True, null=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    delivery_duration = models.DurationField(null=True, blank=True)
+    status_change_date = models.DateTimeField(auto_now=True)
 
 
     def __str__(self):
         return f"Order {self.id} - {self.user} - {self.status}"
+
+
+
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     flower = models.ForeignKey(Flower, on_delete=models.CASCADE)
@@ -55,4 +58,3 @@ class Review(models.Model):
 
     def __str__(self):
         return f'Review by {self.user} on {self.flower}'
-

@@ -2,7 +2,6 @@ from django.urls import path
 from . import views
 
 
-
 app_name = 'accounts'  # Убедитесь, что пространство имен задано правильно
 
 urlpatterns = [

@@ -2,7 +2,7 @@
 from datetime import timedelta
 import requests
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -32,21 +32,21 @@ def cart_view(request, flower_id):
     return redirect('cart_detail')
 
 
+
 @login_required
 def create_order(request, flower_id):
-    flower = get_object_or_404(Flower, id=flower_id)
+    flower = get_object_or_404(Flower, id=flower_id)  # Получаем цветок по id
 
     if request.method == 'POST':
         form = OrderForm(request.POST)
-
         if form.is_valid():
             order = form.save(commit=False)
             order.flower = flower
             order.user = request.user
-            order.price = flower.price  # Устанавливаем цену из модели Flower
-
+            order.price = flower.price  # Устанавливаем цену на основе модели Flower
             order.save()
 
+            # Подготовка сообщения для Telegram
             message = (
                 f"Новый заказ:\n\n"
                 f"Номер заказа: {order.id}\n"
@@ -56,14 +56,13 @@ def create_order(request, flower_id):
                 f"Дата доставки: {order.delivery_date}\n"
                 f"Время доставки: {order.delivery_time}\n"
                 f"Комментарий: {order.comment}\n"
-                f"Цена: {order.price} руб.\n"  # Используем цену из заказа
+                f"Цена: {order.price} руб.\n"
                 f"Статус: {order.get_status_display()}"
             )
 
-            bot_token = '6387690359:AAGG4VTh5b4DV7yZDlHW-a_s-_H36wZToH4'
-            chat_id = '1026013462'
-
+            # Отправка сообщения в Telegram
             image_url = request.build_absolute_uri(flower.image.url) if flower.image else None
+
             try:
                 if image_url:
                     image_response = requests.get(image_url)
@@ -84,9 +83,8 @@ def create_order(request, flower_id):
                         'text': message
                     })
 
-
                 if response.status_code == 200:
-                    return redirect('order_history')
+                    return redirect('order_history')  # Перенаправляем на историю заказов
                 else:
                     return HttpResponse(
                         f"Ошибка при отправке данных в Telegram. Код ошибки: {response.status_code}. Ответ: {response.text}",
@@ -95,15 +93,12 @@ def create_order(request, flower_id):
             except requests.RequestException as e:
                 return HttpResponse(f"Произошла ошибка при отправке запроса: {str(e)}", status=500)
 
-        else:
-            return render(request, 'create_order.html', {'flower': flower, 'form': form})
-
-    elif request.method == 'GET':
-        form = OrderForm()
-        return render(request, 'create_order.html', {'flower': flower, 'form': form})
-
     else:
-        return HttpResponseBadRequest("Неверный метод запроса.")
+        form = OrderForm()
+
+    return render(request, 'create_order.html', {'flower': flower, 'form': form})
+
+
 
 
 @login_required

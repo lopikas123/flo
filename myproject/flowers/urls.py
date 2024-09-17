@@ -12,4 +12,7 @@ urlpatterns = [
     path('flower/<int:flower_id>/add_review/', views.add_review, name='add_review'),
     path('daily_report/', views.daily_report, name='daily_report'),
 
+
+
+
 ]

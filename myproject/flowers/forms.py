@@ -15,6 +15,7 @@ class ReviewForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
+        exclude = ['price', 'delivery_duration']  # Игнорируем эти поля
         fields = ['delivery_address', 'delivery_date', 'delivery_time', 'comment']
         widgets = {
             'delivery_date': forms.DateInput(attrs={'type': 'date'}),
