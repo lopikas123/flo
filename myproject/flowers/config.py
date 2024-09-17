@@ -1,0 +1,2 @@
+bot_token = '6387690359:AAGG4VTh5b4DV7yZDlHW-a_s-_H36wZToH4'
+chat_id = '1026013462'

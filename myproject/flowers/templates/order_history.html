@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">
+        {% if user.is_superuser %}
+            История заказов всех пользователей
+        {% else %}
+            История ваших заказов
+        {% endif %}
+    </h1>
+
+    {% if orders %}
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for order in orders %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Цветок: {{ order.flower.name }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Дата создания: {{ order.created_at|date:"d.m.Y H:i" }}</h6>
+                            <p class="card-text">
+                                <strong>Адрес доставки:</strong> {{ order.delivery_address }}<br>
+                                <strong>Дата доставки:</strong> {{ order.delivery_date }}<br>
+                                <strong>Время доставки:</strong> {{ order.delivery_time }}<br>
+                                <strong>Комментарий:</strong> {{ order.comment }}<br>
+                                <strong>Цена:</strong> {{ order.flower.price }} руб.<br>
+                                <strong>Статус:</strong> {{ order.get_status_display }}
+                            </p>
+
+                                                        <!-- Кнопка "Повторить заказ" для обычных пользователей -->
+                            {% if not user.is_superuser %}
+                                <a href="{% url 'repair_order' order.id %}" class="btn btn-success">Повторить заказ</a>
+                            {% endif %}
+
+                            <!-- Кнопка "Изменить статус" для superuser -->
+                            {% if user.is_superuser %}
+                                <a href="{% url 'update_status' order.id %}" class="btn btn-primary">Изменить статус</a>
+                            {% endif %}
+                        </div> <!-- card-body ends -->
+                    </div> <!-- card ends -->
+                </div> <!-- col-md-6 ends -->
+            {% endfor %}
+        </div> <!-- row ends -->
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            {% if user.is_superuser %}
+                Нет заказов.
+            {% else %}
+                У вас нет заказов.
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -18,9 +18,6 @@ from django.shortcuts import render
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-zjn+$%556$i8@v9*3*&)!4hn)4qkik^8iv3e9)gpiqncm#1uz_'
 
@@ -42,6 +39,10 @@ INSTALLED_APPS = [
     'accounts',
     "myapp",
     "myproject",
+    'flowers',
+    'flowers.management.commands.bot',
+
+
 
 ]
 
@@ -106,9 +107,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -118,15 +116,11 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
+
 
 STATIC_URL = 'static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'home'  # Страница, куда перенаправляется пользователь после входа
 LOGOUT_REDIRECT_URL = 'home'  # Страница, куда перенаправляется после выхода
@@ -137,8 +131,54 @@ from django.contrib.auth.decorators import login_required
 def profile(request):
     return render(request, 'accounts/profile.html')
 
-STATIC_URL = '/static/'
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DEBUG = True
+
+TELEGRAM_BOT_TOKEN = '6387690359:AAGG4VTh5b4DV7yZDlHW-a_s-_H36wZToH4'
+
+STATICFILES_DIRS = [
+   os.path.join(BASE_DIR, 'static'),]
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
+
+LOGIN_REDIRECT_URL = 'home.html'  # URL, на который перенаправляется пользователь после входа
+LOGOUT_REDIRECT_URL = 'login.html'  # URL, на который перенаправляется пользователь после выхода
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+bot_token = '6387690359:AAGG4VTh5b4DV7yZDlHW-a_s-_H36wZToH4'
+chat_id = '1026013462'
