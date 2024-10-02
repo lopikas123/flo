@@ -180,5 +180,5 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-bot_token = '6387690359:AAGG4VTh5b4DV7yZDlHW-a_s-_H36wZToH4'
-chat_id = '1026013462'
+bot_token = #idботатг
+chat_id = #idчататг
