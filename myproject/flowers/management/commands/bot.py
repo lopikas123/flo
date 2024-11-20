@@ -1,8 +1,8 @@
 import logging
 from datetime import datetime
-from django.forms import DurationField, FloatField
+
 from django.core.management.base import BaseCommand
-from django.db.models import Avg, Count, Func, ExpressionWrapper, F, fields
+from django.db.models import Avg, Func
 
 
 
@@ -45,9 +45,7 @@ def generate_report():
             total_delivery_time += duration_minutes
             delivered_orders_count += 1
 
-            # Отладочные выводы
-            print(
-                f"Order ID: {order.id}, Delivery Date: {delivery_date}, Status Change Date: {status_change_date}, Duration: {duration_minutes:.2f} minutes")
+
 
     if delivered_orders_count > 0:
         avg_delivery_time = total_delivery_time / delivered_orders_count
@@ -57,7 +55,6 @@ def generate_report():
     report_data = "Аналитика и отчеты по заказам:\n"
     report_data += f"Общее количество заказов: {total_orders}\n"
     report_data += f"Средняя сумма заказа: {average_order_amount:.2f}\n"
-    report_data += f"Среднее время выполнения: {avg_delivery_time:.2f} минут\n"
 
     return report_data
 

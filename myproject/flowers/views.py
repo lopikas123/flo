@@ -25,7 +25,6 @@ def cart_view(request, flower_id):
     cart_item, created = Cart.objects.get_or_create(user=request.user, flower=flower)
 
     if not created:
-        # If the item already exists, just increase the quantity
         cart_item.quantity += 1
         cart_item.save()
 
@@ -35,7 +34,7 @@ def cart_view(request, flower_id):
 
 @login_required
 def create_order(request, flower_id):
-    flower = get_object_or_404(Flower, id=flower_id)  # Получаем цветок по id
+    flower = get_object_or_404(Flower, id=flower_id)
 
     if request.method == 'POST':
         form = OrderForm(request.POST)
@@ -43,10 +42,10 @@ def create_order(request, flower_id):
             order = form.save(commit=False)
             order.flower = flower
             order.user = request.user
-            order.price = flower.price  # Устанавливаем цену на основе модели Flower
+            order.price = flower.price
             order.save()
 
-            # Подготовка сообщения для Telegram
+
             message = (
                 f"Новый заказ:\n\n"
                 f"Номер заказа: {order.id}\n"
@@ -127,20 +126,20 @@ def order_history(request):
 def update_order_status(request, order_id):
     order = get_object_or_404(Order, id=order_id)
 
-    # Check if the user is a superuser
-    if not request.user.is_superuser:
-        return redirect('order_history')  # Redirect non-superusers to order history
 
-    previous_status = order.status  # Store the current status for comparison
+    if not request.user.is_superuser:
+        return redirect('order_history')
+
+    previous_status = order.status
 
     if request.method == 'POST':
         form = OrderStatusForm(request.POST, instance=order)
         if form.is_valid():
-            form.save()  # Save the form data
-            new_status = form.cleaned_data['status']  # Get the new status
+            form.save()
+            new_status = form.cleaned_data['status']
 
-            if previous_status != new_status:  # Check if the status has changed
-                # Prepare the message for Telegram
+            if previous_status != new_status:
+
                 message = (f"Статус заказа #{order.id} изменён с "
                            f"{dict(Order.STATUS_CHOICES).get(previous_status)} на "
                            f"{dict(Order.STATUS_CHOICES).get(new_status)}")
@@ -154,19 +153,16 @@ def update_order_status(request, order_id):
                 }
 
                 try:
-                    # Send the message to Telegram
                     response = requests.post(url, data=payload)
-                    response.raise_for_status()  # Raise an exception for HTTP errors
+                    response.raise_for_status()
                 except requests.RequestException as e:
-                    # Handle request errors (e.g., log the error or notify the admin)
                     print(f"Error sending message to Telegram: {e}")
 
             messages.success(request, f'Статус заказа #{order.id} был обновлён.')
             return redirect('order_history')
     else:
-        form = OrderStatusForm(instance=order)  # Provide the form with the current order data
+        form = OrderStatusForm(instance=order)
 
-    # Render the form in the template
     return render(request, 'update_status.html', {'form': form, 'order': order})
 
 @login_required
@@ -201,6 +197,7 @@ def repair_order(request, order_id):
                 f"Цена: {new_order.price} руб.\n"
                 f"Статус: {new_order.get_status_display()}"
             )
+
 
 
 
@@ -258,7 +255,8 @@ def add_review(request, flower_id):
     else:
         form = ReviewForm()
 
-    return render(request, 'add_review.html', {'flower': flower, 'form': form})
+    return render(request, 'flower_detail.html', {'flower': flower, 'form': form})
+
 
 def flower_detail(request, flower_id):
     flower = get_object_or_404(Flower, id=flower_id)
@@ -307,5 +305,4 @@ def daily_report(request):
     response['Content-Disposition'] = f'attachment; filename="daily_report_{today.strftime("%Y-%m")}.html"'
 
     return response
-
 

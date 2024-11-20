@@ -3,6 +3,8 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<h1>Welcome, {{ username }}!</h1>
-<p>This is your account page.</p>
+    {% if user.is_authenticated %}
+        <h1>Welcome, {{ user.username }}!</h1>
+        <p>This is your account page.</p>
+    {% endif %}
 {% endblock %}

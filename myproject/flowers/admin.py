@@ -7,7 +7,6 @@ class FlowerAdmin(admin.ModelAdmin):
     list_display = ('name', 'price', 'available')
     search_fields = ('name', 'description')
 
-
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('flower', 'user', 'delivery_address', 'delivery_date', 'delivery_time', 'status', 'created_at')
@@ -19,3 +18,4 @@ class OrderAdmin(admin.ModelAdmin):
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ['flower', 'user', 'rating', 'created_at']
     list_filter = ['flower', 'rating', 'created_at']
+

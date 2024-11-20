@@ -11,41 +11,64 @@
     <p class="h4">Цена: ${{ flower.price }}</p>
 
     <h2 class="mt-5">Оставить отзыв на товар: {{ flower.name }}</h2>
+
+    <!-- Форма для добавления отзыва -->
     <form method="post" action="{% url 'add_review' flower.id %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-primary">Оставить отзыв</button>
+
+        <!-- Поле для рейтинга (скрытое) -->
+        <input type="hidden" id="rating" name="rating" value="0">
+
+        <!-- Звездочки для выбора рейтинга -->
+        <div class="rating mb-3">
+            <span class="fa fa-star" data-value="1"></span>
+            <span class="fa fa-star" data-value="2"></span>
+            <span class="fa fa-star" data-value="3"></span>
+            <span class="fa fa-star" data-value="4"></span>
+            <span class="fa fa-star" data-value="5"></span>
+        </div>
+
+        <!-- Поле для комментария -->
+        <div class="form-group mt-3">
+            <label for="comment">Комментарий:</label>
+            <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+        </div>
+
+        <!-- Кнопка для отправки отзыва -->
+        <button type="submit" class="btn btn-primary mt-3">Оставить отзыв</button>
     </form>
+
+    <h2 class="mt-5 mb-4">Отзывы:</h2>
+    {% if flower.reviews.all %}
+    <div class="list-group mb-4">
+        {% for review in flower.reviews.all %}
+        <div class="list-group-item mb-3">
+            <h5 class="mb-1">{{ review.user.username }}</h5>
+            <small class="text-muted">{{ review.created_at }}</small>
+            <div class="mb-2">
+                Оценка:
+                <!-- Отображение рейтинга в виде звезд -->
+                {% for i in "12345" %}
+                {% if i|add:0 <= review.rating %}
+                <span class="fa fa-star checked"></span>
+                {% else %}
+                <span class="fa fa-star"></span>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <p class="mb-1">{{ review.comment }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>Нет отзывов</p>
+    {% endif %}
 </div>
 
-  <h2 class="mb-4">Отзывы:</h2>
-  {% if reviews %}
-    <div class="list-group mb-4">
-      {% for review in reviews %}
-        <div class="list-group-item mb-3">
-          <h5 class="mb-1">{{ review.user.username }}</h5>
-          <small class="text-muted">{{ review.created_at }}</small>
-          <div class="mb-2">
-            Оценка:
-            <!-- Звезды для рейтинга -->
-            {% for i in "12345" %}
-              {% if i|add:0 <= review.rating %}
-                <span class="fa fa-star checked"></span>
-              {% else %}
-                <span class="fa fa-star"></span>
-              {% endif %}
-            {% endfor %}
-          </div>
-          <p class="mb-1">{{ review.comment }}</p>
-        </div>
-      {% endfor %}
-    </div>
-  {% else %}
-    <p>Нет отзывов</p>
-  {% endif %}
+<!-- Подключение Font Awesome для отображения звезд -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-<!-- Подключение Font Awesome -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
-
+<!-- CSS для звезд -->
 <style>
   .fa-star {
     font-size: 2rem;
@@ -61,6 +84,7 @@
   }
 </style>
 
+<!-- JavaScript для работы с выбором звезд -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const stars = document.querySelectorAll('.rating .fa-star');
@@ -77,6 +101,7 @@
     }
 
     stars.forEach(star => {
+      // Обработчик наведения для подсветки звезд
       star.addEventListener('mouseover', () => {
         const value = star.getAttribute('data-value');
         stars.forEach(s => {
@@ -88,21 +113,17 @@
         });
       });
 
+      // Сброс подсветки при убирании курсора
       star.addEventListener('mouseout', () => {
-        const currentRating = ratingInput.value;
-        stars.forEach(s => {
-          s.classList.remove('hover');
-        });
-        updateStars(currentRating);
+        stars.forEach(s => s.classList.remove('hover'));
+        updateStars(ratingInput.value); // Обновляем отображение в зависимости от выбранного рейтинга
       });
 
+      // Обработчик клика для выбора рейтинга
       star.addEventListener('click', () => {
         const value = star.getAttribute('data-value');
-        ratingInput.value = value;
-        updateStars(value);
-        stars.forEach(s => {
-          s.classList.remove('hover');
-        });
+        ratingInput.value = value;  // Устанавливаем значение рейтинга в скрытом input
+        updateStars(value);  // Обновляем вид звезд
       });
     });
   });

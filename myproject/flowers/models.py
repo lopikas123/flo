@@ -12,6 +12,8 @@ class Flower(models.Model):
     def __str__(self):
         return self.name
 
+
+
 class Order(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Принят к работе'),
@@ -58,3 +60,4 @@ class Review(models.Model):
 
     def __str__(self):
         return f'Review by {self.user} on {self.flower}'
+

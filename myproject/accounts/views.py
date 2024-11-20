@@ -51,6 +51,7 @@ def logout(request):
     auth_logout(request)
     return redirect('accounts:login')
 
+
 def home(request):
     return render(request, 'home.html')
 
